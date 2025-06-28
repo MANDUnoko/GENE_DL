@@ -107,8 +107,7 @@ self.attn_weights = attn_weights.detach().cpu()
 ---
 
 ## 학습 곡선
-Loss Curve: [이미지 삽입]
-
+![Loss Curve](./images/LC.png)
 ---
 
 ### 테스트셋 기준 성능
@@ -121,7 +120,7 @@ Loss Curve: [이미지 삽입]
 | F1 Score    | 0.8571 |
 | AUC         | 0.9500 |
 
-[이미지 삽입]
+!(./images/Confusion_Matrix.png)
 
 ---
 
