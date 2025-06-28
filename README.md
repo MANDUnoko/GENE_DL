@@ -120,7 +120,7 @@ self.attn_weights = attn_weights.detach().cpu()
 | F1 Score    | 0.8571 |
 | AUC         | 0.9500 |
 
-!(./images/Confusion_Matrix.png)
+![Confusion Matrix](./images/Confusion_Matrix.png)
 
 ---
 
