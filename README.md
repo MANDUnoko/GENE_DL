@@ -42,6 +42,8 @@ nn.Linear(input_dim, 64) → ReLU → nn.Linear(64, latent_dim)
 - ReLU 활성화로 비선형 압축
   
 [설계 의도]
+- 소규모 샘플 수(60)와 다수의 차원(18,000)으로 인한 차원의 저주를 극복
+- 단순 PCA와 달리 ReLU 활성화 함수를 통해 비선형 변환을 수행하여 정보 손실을 최소화합니다
 
 ### 2. Embedding for Transformer
 ```
@@ -53,6 +55,7 @@ x = self.embedding(x)  # Linear(1 → tf_embed_dim)
 - latent 각 차원을 token처럼 처리하여 attention 적용
   
 [설계 의도]
+- Transformer는 기본적으로 시퀀스 처리 구조를 가짐, 각 잠재 차원을 동일한 임베딩 공간으로 투사(Linear(1 → tf_embed_dim))하여 잠재 차원 간의 상관관계를 토큰 관계로 해석할 수 있도록 함
 
 ### 3. Self-Attention (Transformer Core)
 ```
@@ -64,6 +67,8 @@ nn.MultiheadAttention(embed_dim=tf_embed_dim, num_heads=1)
 - head 수를 1로 고정하여 소규모 데이터에서 노이즈 최소화
   
 [설계 의도]
+- num_heads=1로 설정하여 소규모 데이터에서 어텐션 헤드가 많을 때 발생할 수 있는 노이즈 유입을 줄임
+- 추출된 어텐션 가중치는 FN 환자의 피처 해석에 직접 활용되어 설명 가능한 AI를 구현
 
 ### 4. Global Average Pooling
 ```
@@ -74,18 +79,20 @@ x = attn_out.mean(dim=1)
 - CLS 토큰 대신 mean pooling → 구조 간소화
 
 [설계 의도]
-
+- 잠재 차원의 길이가 작으므로 풀링으로 인한 정보 손실이 적음
+  
 ### 5. Classifier
 ```
 LayerNorm → Linear → Sigmoid
 ```
 [역할]
 - 풀링된 representation을 이진 분류로 변환
-- LayerNorm으로 small batch 안정화
-- Stroke vs Normal 분류
+- LayerNorm으로 small batch 학습 안정성 향상
+- Sigmoid 출력으로 Stroke vs Normal 분류
 
 [설계 의도]
-
+- 과적합 방지를 위해 단순 선형 분류기를 구성
+  
 ### 6. Attention 저장
 ```
 self.attn_weights = attn_weights.detach().cpu()
