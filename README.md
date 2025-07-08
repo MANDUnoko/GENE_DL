@@ -13,7 +13,7 @@ AETransformerLite는 기존 AutoEncoder(AE)의 비선형 차원 축소 능력과
 
 ## 데이터 특성 및 전처리
 
-- **입력 데이터**: `TF_input.csv`
+- **입력 데이터**: GSE16561 마이크로어레이(RNA microarray)
 - **샘플 수**: 약 60개 (소규모)
 - **유전자 수 (Feature 수)**: 약 18,000개 (고차원)
 - **라벨 처리**: `Unnamed: 0` 열에서 `SampleID` 및 `Label`(0/1) 분리
@@ -26,7 +26,7 @@ AETransformerLite는 기존 AutoEncoder(AE)의 비선형 차원 축소 능력과
 
 ## 모델 구조: AE + Self-Attention
 
-AETransformerLite는 다음 세 가지 조건을 동시에 만족하기 위해 설계:
+AE + Transformer는 다음 세 가지 조건을 동시에 만족하기 위해 설계:
 
 - 소규모 샘플
 - 고차원 유전자 feature
